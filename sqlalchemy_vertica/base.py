@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.engine import reflection
 
 
-class Vertica(PyODBCConnector, PGDialect):
+class VerticaDialect(PyODBCConnector, PGDialect):
     """ Vertica Dialect using a pyodbc connection and PGDialect """
 
     ischema_names = {
