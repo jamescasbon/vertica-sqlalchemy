@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='vertica-sqlalchemy',
-    version='0.1',
+    version='0.11',
     description='Vertica dialect for sqlalchemy',
     long_description=open("README.md").read(),
     author='James Casbon',
@@ -19,7 +19,7 @@ setup(
     ],
     entry_points="""
     [sqlalchemy.dialects]
-    vertica.pyodbc = verticasa:Vertica
+    vertica.pyodbc = sqlalchemy_vertica.base:VerticaDialect
     """
 )
 
