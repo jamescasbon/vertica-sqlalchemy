@@ -23,11 +23,11 @@ class VerticaDialect(PyODBCConnector, PGDialect):
         'DATETIME': sqltypes.DATETIME,
         'SMALLDATETIME': sqltypes.DATETIME,
         'TIME': sqltypes.TIME,
+        'TIME': sqltypes.TIME(timezone=True),
+        'TIMESTAMP': sqltypes.TIMESTAMP,
+        'TIMESTAMP WITH TIMEZONE': sqltypes.TIMESTAMP(timezone=True),
 
         # Not supported yet
-        # TIME WITH TIMEZONE
-        # TIMESTAMP
-        # TIMESTAMP WITH TIMEZONE
         # INTERVAL
 
         # All the same internal representation
