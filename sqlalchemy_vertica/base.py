@@ -1,3 +1,4 @@
+import re
 from sqlalchemy import types as sqltypes
 from sqlalchemy.connectors.pyodbc import PyODBCConnector
 from sqlalchemy.dialects.postgresql.base import PGDialect
@@ -48,7 +49,64 @@ class VerticaDialect(PyODBCConnector, PGDialect):
         'NUMBER': sqltypes.NUMERIC,
         'MONEY': sqltypes.NUMERIC,
     }
+    name = 'vertica'
     pyodbc_driver_name = 'Vertica'
+
+    def has_schema(self, connection, schema):
+        query = ("SELECT EXISTS (SELECT schema_name FROM v_catalog.schemata "
+                 "WHERE schema_name='%s')") % (schema)
+        rs = connection.execute(query)
+        return bool(rs.scalar())
+
+    def has_table(self, connection, table_name, schema=None):
+        if schema is None:
+            schema = self._get_default_schema_name(connection)
+        query = ("SELECT EXISTS ("
+                 "SELECT table_name FROM v_catalog.all_tables "
+                 "WHERE schema_name='%s' AND "
+                 "table_name='%s'"
+                 ")") % (schema, table_name)
+        rs = connection.execute(query)
+        return bool(rs.scalar())
+
+    def has_sequence(self, connection, sequence_name, schema=None):
+        if schema is None:
+            schema = self._get_default_schema_name(connection)
+        query = ("SELECT EXISTS ("
+                 "SELECT sequence_name FROM v_catalog.sequences "
+                 "WHERE sequence_schema='%s' AND "
+                 "sequence_name='%s'"
+                 ")") % (schema, sequence_name)
+        rs = connection.execute(query)
+        return bool(rs.scalar())
+
+    def has_type(self, connection, type_name, schema=None):
+        query = ("SELECT EXISTS ("
+                 "SELECT type_name FROM v_catalog.types "
+                 "WHERE type_name='%s'"
+                 ")") % (type_name)
+        rs = connection.execute(query)
+        return bool(rs.scalar())
+
+    def _get_server_version_info(self, connection):
+        v = connection.scalar("select version()")
+        m = re.match(
+            '.*Vertica Analytic Database '
+            'v(\d+)\.(\d+)\.(\d)+.*',
+            v)
+        if not m:
+            raise AssertionError(
+                "Could not determine version from string '%s'" % v)
+        return tuple([int(x) for x in m.group(1, 2, 3) if x is not None])
+
+    def _get_default_schema_name(self, connection):
+        return connection.scalar("select current_schema()")
+
+    @reflection.cache
+    def get_schema_names(self, connection, **kw):
+        query = "SELECT schema_name FROM v_catalog.schemata"
+        rs = connection.execute(query)
+        return [row[0] for row in rs if not row[0].startswith('v_')]
 
     @reflection.cache
     def get_table_names(self, connection, schema=None, **kw):
