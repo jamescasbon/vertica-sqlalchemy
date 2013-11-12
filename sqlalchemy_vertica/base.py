@@ -175,3 +175,7 @@ class VerticaDialect(PyODBCConnector, PGDialect):
 
     def get_indexes(self, connection, table_name, schema, **kw):
         return []
+
+    # Disable index creation since that's not a thing in Vertica.
+    def visit_create_index(self, create):
+        return None
