@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='vertica-sqlalchemy',
-    version='0.12',
+    version='0.13',
     description='Vertica dialect for sqlalchemy',
-    long_description=open("README.md").read(),
+    long_description=open("README.rst").read(),
     author='James Casbon',
     author_email='casbon@gmail.com',
     license="MIT",
