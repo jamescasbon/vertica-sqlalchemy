@@ -130,7 +130,7 @@ class VerticaDialect(PyODBCConnector, PGDialect):
 
     @reflection.cache
     def get_columns(self, connection, table_name, schema=None, **kw):
-        print 'in get columns', table_name
+        print('in get columns', table_name)
         s = ("SELECT * FROM v_catalog.columns "
              "WHERE table_name = '%s' ") % (table_name,)
 
