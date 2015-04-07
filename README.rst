@@ -15,9 +15,9 @@ This module implements a Vertica dialect for SQLAlchemy.  You can use it:
     ))
 
 
-This work is mainly a package of code [posted](https://groups.google.com/d/msg/sqlalchemy/ttJzN-t9R74/9W1d9KfHK_0J)
-to the SQLAlchemy mailing list by 'Bo' (Google groups won't let me see the
-original author).
+This work is mainly a package of code
+[posted](https://groups.google.com/d/msg/sqlalchemy/ttJzN-t9R74/9W1d9KfHK_0J)
+to the SQLAlchemy mailing list.
 
 I have tested this for table introspection, selects and joins.  However, I do
 not have access to a Vertica database to test against.  If you do, let me know.
